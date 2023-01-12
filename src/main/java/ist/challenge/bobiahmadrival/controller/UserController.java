@@ -1,11 +1,9 @@
 package ist.challenge.bobiahmadrival.controller;
 
-import ist.challenge.bobiahmadrival.dto.request.RegistrationUserRequest;
+import ist.challenge.bobiahmadrival.dto.request.UserRequest;
 import ist.challenge.bobiahmadrival.dto.response.ABaseResponse;
 import ist.challenge.bobiahmadrival.dto.response.ResponseWithData;
 import ist.challenge.bobiahmadrival.entity.User;
-import ist.challenge.bobiahmadrival.error.DuplicateException;
-import ist.challenge.bobiahmadrival.error.UnAuthorizedException;
 import ist.challenge.bobiahmadrival.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<?> registration(@RequestBody RegistrationUserRequest userRequest){
+    public ResponseEntity<?> registration(@RequestBody UserRequest userRequest){
         // try{
             userService.registration(userRequest);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody RegistrationUserRequest loginRequest){
+    public ResponseEntity<?> login(@RequestBody UserRequest loginRequest){
         userService.login(loginRequest);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ABaseResponse(200, "Login Successfully"));
@@ -52,5 +50,12 @@ public class UserController {
         List<User> users = userService.listUser();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseWithData<List<User>>(200, "Success", users));
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> editUser(@PathVariable(value = "id") Long id, @RequestBody UserRequest request){
+        userService.editUser(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ABaseResponse(201, "User has been edited successfully"));
     }
 }
