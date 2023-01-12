@@ -3,6 +3,7 @@ package ist.challenge.bobiahmadrival.service.impl;
 import ist.challenge.bobiahmadrival.dto.request.RegistrationUserRequest;
 import ist.challenge.bobiahmadrival.entity.User;
 import ist.challenge.bobiahmadrival.error.DuplicateException;
+import ist.challenge.bobiahmadrival.error.UnAuthorizedException;
 import ist.challenge.bobiahmadrival.repository.UserRepository;
 import ist.challenge.bobiahmadrival.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void login(RegistrationUserRequest loginUserRequest) {
-
+        if(!this.validateUser(loginUserRequest)){
+            throw new NullPointerException();
+        }
+        User userFromDB = userRepository.findByUsername(loginUserRequest.getUsername());
+        if(userFromDB == null){
+            throw new UnAuthorizedException();
+        }
+        if(!loginUserRequest.getPassword().equals(userFromDB.getPassword())){
+            throw new UnAuthorizedException();
+        }
     }
 
     @Override
