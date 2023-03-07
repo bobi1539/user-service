@@ -57,8 +57,10 @@ public class UserController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> editUser(@PathVariable(value = "id") Long id, @RequestBody UserRequest request){
-        userService.editUser(id, request);
+        UserResponse userResponse = userService.editUser(id, request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ABaseResponse(201, "User has been edited successfully"));
+                .body(
+                        new ResponseWithData<UserResponse>(200, "User has been edited successfully", userResponse)
+                );
     }
 }

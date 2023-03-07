@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUser(Long id, UserRequest editUserRequest) {
+    public UserResponse editUser(Long id, UserRequest editUserRequest) {
         Optional<User> userFromDB = userRepository.findById(id);
         if(userFromDB.isEmpty()){
             throw new NullPointerException("User with id " + id + " not exist");
@@ -85,7 +85,12 @@ public class UserServiceImpl implements UserService {
 
         user.setUsername(editUserRequest.getUsername());
         user.setPassword(editUserRequest.getPassword());
-        userRepository.save(user);
+        User userUpdated = userRepository.save(user);
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(userUpdated.getId());
+        userResponse.setUsername(userUpdated.getUsername());
+        return userResponse;
     }
 
     private boolean validateUser(UserRequest userRequest){

@@ -18,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 @SpringBootTest
 public class UserServiceImplTest {
 
@@ -88,6 +90,51 @@ public class UserServiceImplTest {
             userRequest.setPassword("passwordwrong");
 
             this.userService.login(userRequest);
+        });
+    }
+
+    @Test
+    void listUserSuccessTest() {
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("testPassword");
+
+        this.userRepository.save(user);
+
+        List<User> users = this.userService.listUser();
+
+        Assertions.assertNotNull(users);
+        Assertions.assertTrue(users.size() > 0);
+
+        this.userRepository.delete(user);
+    }
+
+    @Test
+    void editUserSuccessTest() {
+        User user = new User();
+        user.setUsername("editUserTest");
+        user.setPassword("passwordTest");
+
+        User userSaved = this.userRepository.save(user);
+
+        Long idForEdit = userSaved.getId();
+
+        UserRequest userRequest = new UserRequest();
+        userRequest.setUsername("editUserTestNew");
+        userRequest.setPassword("passwordTestNew");
+
+        UserResponse userResponse = this.userService.editUser(idForEdit, userRequest);
+
+        Assertions.assertEquals(userResponse.getId(), idForEdit);
+        Assertions.assertEquals(userResponse.getUsername(), userRequest.getUsername());
+    }
+
+    @Test
+    void editUserIdNotFoundTest() {
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            Long id = -1L;
+            UserRequest userRequest = new UserRequest("test", "test");
+            this.userService.editUser(id, userRequest);
         });
     }
 }

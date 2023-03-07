@@ -10,5 +10,5 @@ public interface UserService {
     void registration(UserRequest registrationUserRequest);
     UserResponse login(UserRequest loginUserRequest);
     List<User> listUser();
-    void editUser(Long id, UserRequest editUserRequest);
+    UserResponse editUser(Long id, UserRequest editUserRequest);
 }
