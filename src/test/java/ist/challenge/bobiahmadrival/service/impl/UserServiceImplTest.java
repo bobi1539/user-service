@@ -2,8 +2,10 @@ package ist.challenge.bobiahmadrival.service.impl;
 
 import ist.challenge.bobiahmadrival.BobiahmadrivalApplication;
 import ist.challenge.bobiahmadrival.dto.request.UserRequest;
+import ist.challenge.bobiahmadrival.dto.response.UserResponse;
 import ist.challenge.bobiahmadrival.entity.User;
 import ist.challenge.bobiahmadrival.error.DuplicateException;
+import ist.challenge.bobiahmadrival.error.UnAuthorizedException;
 import ist.challenge.bobiahmadrival.repository.UserRepository;
 import ist.challenge.bobiahmadrival.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -46,6 +48,46 @@ public class UserServiceImplTest {
         Assertions.assertThrows(NullPointerException.class, () -> {
             UserRequest userRequest = new UserRequest();
             this.userService.registration(userRequest);
+        });
+    }
+
+    @Test
+    void loginSuccessTest() {
+        UserRequest userRequest = new UserRequest();
+        userRequest.setUsername("ucup");
+        userRequest.setPassword("password");
+
+        UserResponse userResponse = this.userService.login(userRequest);
+        Assertions.assertEquals(userRequest.getUsername(), userResponse.getUsername());
+    }
+
+    @Test
+    void loginValidateUserNullOrBlankTest() {
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            UserRequest userRequest = new UserRequest();
+            this.userService.login(userRequest);
+        });
+    }
+
+    @Test
+    void loginUsernameNotExistTest() {
+        Assertions.assertThrows(UnAuthorizedException.class, () -> {
+            UserRequest userRequest = new UserRequest();
+            userRequest.setUsername("notfound");
+            userRequest.setPassword("password");
+
+            this.userService.login(userRequest);
+        });
+    }
+
+    @Test
+    void loginPasswordIsWrongTest() {
+        Assertions.assertThrows(UnAuthorizedException.class, () -> {
+            UserRequest userRequest = new UserRequest();
+            userRequest.setUsername("ucup");
+            userRequest.setPassword("passwordwrong");
+
+            this.userService.login(userRequest);
         });
     }
 }

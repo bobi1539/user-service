@@ -3,6 +3,7 @@ package ist.challenge.bobiahmadrival.controller;
 import ist.challenge.bobiahmadrival.dto.request.UserRequest;
 import ist.challenge.bobiahmadrival.dto.response.ABaseResponse;
 import ist.challenge.bobiahmadrival.dto.response.ResponseWithData;
+import ist.challenge.bobiahmadrival.dto.response.UserResponse;
 import ist.challenge.bobiahmadrival.entity.User;
 import ist.challenge.bobiahmadrival.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,9 +41,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserRequest loginRequest){
-        userService.login(loginRequest);
+        UserResponse userResponse = userService.login(loginRequest);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ABaseResponse(200, "Login Successfully"));
+                .body(
+                        new ResponseWithData<UserResponse>(200, "Login Successfully", userResponse)
+                );
     }
 
     @GetMapping

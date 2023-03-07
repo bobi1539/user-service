@@ -2,6 +2,7 @@ package ist.challenge.bobiahmadrival.service.impl;
 
 import ist.challenge.bobiahmadrival.constant.Constant;
 import ist.challenge.bobiahmadrival.dto.request.UserRequest;
+import ist.challenge.bobiahmadrival.dto.response.UserResponse;
 import ist.challenge.bobiahmadrival.entity.User;
 import ist.challenge.bobiahmadrival.error.DuplicateException;
 import ist.challenge.bobiahmadrival.error.UnAuthorizedException;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void login(UserRequest loginUserRequest) {
+    public UserResponse login(UserRequest loginUserRequest) {
         if(!this.validateUser(loginUserRequest)){
             throw new NullPointerException(Constant.USERNAME_OR_PASSWORD_CANNOT_BE_NULL);
         }
@@ -50,6 +51,12 @@ public class UserServiceImpl implements UserService {
         if(!loginUserRequest.getPassword().equals(userFromDB.getPassword())){
             throw new UnAuthorizedException(Constant.USERNAME_OR_PASSWORD_IS_WRONG);
         }
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(userFromDB.getId());
+        userResponse.setUsername(userFromDB.getUsername());
+
+        return userResponse;
     }
 
     @Override
