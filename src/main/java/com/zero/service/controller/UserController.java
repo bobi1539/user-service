@@ -28,7 +28,7 @@ public class UserController {
         UserResponse userResponse = userService.registration(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                     .body(
-                            new ResponseWithData<UserResponse>(200, "Registration successfully!", userResponse)
+                            new ResponseWithData<UserResponse>(HttpStatus.CREATED.value(), "Registration successfully!", userResponse)
                     );
         // } catch (NullPointerException e){
         // log.error(e.getMessage());
@@ -46,7 +46,7 @@ public class UserController {
         UserResponse userResponse = userService.login(loginRequest);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(
-                        new ResponseWithData<UserResponse>(200, "Login Successfully", userResponse)
+                        new ResponseWithData<UserResponse>(HttpStatus.OK.value(), "Login Successfully", userResponse)
                 );
     }
 
@@ -54,7 +54,7 @@ public class UserController {
     public ResponseEntity<?> listUser(){
         List<User> users = userService.listUser();
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseWithData<List<User>>(200, "Success", users));
+                .body(new ResponseWithData<List<User>>(HttpStatus.OK.value(), "Success", users));
     }
 
     @PutMapping(value = "/{id}")
@@ -62,7 +62,7 @@ public class UserController {
         UserResponse userResponse = userService.editUser(id, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(
-                        new ResponseWithData<UserResponse>(200, "User has been edited successfully", userResponse)
+                        new ResponseWithData<UserResponse>(HttpStatus.CREATED.value(), "User has been edited successfully", userResponse)
                 );
     }
 }
