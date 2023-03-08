@@ -1,0 +1,21 @@
+@startuml
+
+entity User {
+    * id BIG INTEGER <<PK>>
+    --
+    * username VARCHAR(255) UNIQUE
+}
+
+entity Notification {
+    * id INT AUTO INCREMENT <<PK>>
+    --
+    * title VARCHAR(255)
+    * detail TEXT
+    * create_at TIMESTAMP
+    --
+    user_id BIG INTEGER <<FK>>
+}
+
+User ||--o{ Notification
+
+@enduml
