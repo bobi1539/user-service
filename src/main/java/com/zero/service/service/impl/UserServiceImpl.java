@@ -104,6 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isUsernameExist(UserRequest userRequest, User userFromDB){
+        /*
         // find all user
         List<String> listUsername = userRepository.listUsername();
         // remove user in list
@@ -114,5 +115,14 @@ public class UserServiceImpl implements UserService {
             }
         }
         return false;
+        */
+        if(userRequest.getUsername().equals(userFromDB.getUsername())){
+            return false;
+        }
+        User user = this.userRepository.findByUsername(userRequest.getUsername());
+        if(user == null){
+            return false;
+        }
+        return true;
     }
 }
