@@ -28,25 +28,39 @@ public class UserServiceImplTest {
     @Test
     void registrationSuccessTest() {
         UserRequest userRequest = new UserRequest();
-        userRequest.setUsername("otong");
-        userRequest.setPassword("password");
+        userRequest.setUsername("userTestRegistration");
+        userRequest.setPassword("userTestRegistration");
 
-        this.userService.registration(userRequest);
+        UserResponse userResponse = this.userService.registration(userRequest);
 
-        User userOtong = this.userRepository.findByUsername("otong");
 
-        Assertions.assertNotNull(userOtong);
-        Assertions.assertEquals(userRequest.getUsername(), userOtong.getUsername());
+        Assertions.assertNotNull(userResponse);
+        Assertions.assertEquals(userRequest.getUsername(), userResponse.getUsername());
 
-        this.userRepository.delete(userOtong);
+        User userRegistration = this.userRepository.findByUsername(userRequest.getUsername());
+        this.userRepository.delete(userRegistration);
     }
 
     @Test
     void registrationValidateUserNullAndBlankTest() {
-        Assertions.assertThrows(NullPointerException.class, () -> {
+        NullPointerException nullPointerException = Assertions.assertThrows(NullPointerException.class, () -> {
             UserRequest userRequest = new UserRequest();
             this.userService.registration(userRequest);
         });
+        Assertions.assertTrue(nullPointerException.getMessage().equals(Constant.USERNAME_OR_PASSWORD_CANNOT_BE_NULL));
+    }
+
+    @Test
+    void registrationUsernameAlreadyInUseTest() {
+        User userSave = this.userSave();
+        UserRequest userRequest = new UserRequest(userSave.getUsername(), userSave.getPassword());
+
+        DuplicateException duplicateException = Assertions.assertThrows(DuplicateException.class, () -> {
+            this.userService.registration(userRequest);
+        });
+        Assertions.assertTrue(duplicateException.getMessage().equals(Constant.USERNAME_ALREADY_IN_USE));
+
+        this.userRepository.delete(userSave);
     }
 
     @Test

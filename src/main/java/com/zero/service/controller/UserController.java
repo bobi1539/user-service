@@ -25,9 +25,11 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> registration(@RequestBody UserRequest userRequest){
         // try{
-            userService.registration(userRequest);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new ABaseResponse(201, "Registration Successfully"));
+        UserResponse userResponse = userService.registration(userRequest);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(
+                            new ResponseWithData<UserResponse>(200, "Registration successfully!", userResponse)
+                    );
         // } catch (NullPointerException e){
         // log.error(e.getMessage());
         // return ResponseEntity.status(HttpStatus.BAD_REQUEST)

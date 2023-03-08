@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void registration(UserRequest registrationUserRequest) {
+    public UserResponse registration(UserRequest registrationUserRequest) {
         if(!this.validateUser(registrationUserRequest)){
             throw new NullPointerException(Constant.USERNAME_OR_PASSWORD_CANNOT_BE_NULL);
         }
@@ -35,8 +35,10 @@ public class UserServiceImpl implements UserService {
         User userSave = new User();
         userSave.setUsername(registrationUserRequest.getUsername());
         userSave.setPassword(registrationUserRequest.getPassword());
-        userRepository.save(userSave);
 
+        User userSaved = userRepository.save(userSave);
+        UserResponse userResponse = new UserResponse(userSaved.getId(), userSaved.getUsername());
+        return userResponse;
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.zero.service.dto.response.UserResponse;
 import java.util.List;
 
 public interface UserService {
-    void registration(UserRequest registrationUserRequest);
+    UserResponse registration(UserRequest registrationUserRequest);
     UserResponse login(UserRequest loginUserRequest);
     List<User> listUser();
     UserResponse editUser(Long id, UserRequest editUserRequest);
