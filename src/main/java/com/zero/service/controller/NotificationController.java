@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -45,10 +42,19 @@ public class NotificationController {
         );
     }
 
+
+    @GetMapping("/count/{userId}")
+    public ResponseEntity<?> getNotificationUnRead(@PathVariable(value = "userId") Long userId){
+        Integer unRead = this.notificationService.countNotificationUnRead(userId);
+        return ResponseEntity.ok(
+                new ResponseWithData<Integer>(HttpStatus.OK.value(), "Total notification unread", unRead)
+        );
+    }
+
     @GetMapping("/read")
     public ResponseEntity<?> read(){
         log.info("start");
-        Long id = 112L;
+        Long id = 113L;
         List<Notification> read = this.repository.findByUserId(id);
 
         log.info("end");
