@@ -4,6 +4,8 @@ import com.zero.service.constant.Constant;
 import com.zero.service.dto.response.NotificationResponse;
 import com.zero.service.dto.response.UserResponse;
 import com.zero.service.entity.Notification;
+import com.zero.service.entity.NotificationRead;
+import com.zero.service.repository.NotificationReadRepository;
 import com.zero.service.repository.NotificationRepository;
 import com.zero.service.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -54,6 +58,19 @@ public class NotificationServiceImpl implements NotificationService {
             notifResponse.setCreateAt(notification.getCreateAt());
             notifResponse.setUserResponse(userResponse);
             notifResponse.setCategory(notification.getCategory());
+
+            List<NotificationRead> notificationReads = notification.getNotificationReads();
+            if(!notificationReads.isEmpty()) {
+                notificationReads.stream().filter(new Predicate<NotificationRead>() {
+                    @Override
+                    public boolean test(NotificationRead notificationRead) {
+                        return notificationRead.getUser().getId() == userId;
+                    }
+                }).collect(Collectors.toList());
+                notifResponse.setIsRead(notificationReads.get(0).getIsRead());
+            } else {
+                notifResponse.setIsRead(false);
+            }
 
             notificationResponseList.add(notifResponse);
         }

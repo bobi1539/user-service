@@ -17,4 +17,5 @@ public class NotificationResponse {
     private Date createAt;
     private UserResponse userResponse;
     private NotificationCategory category;
+    private Boolean isRead;
 }
