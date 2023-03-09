@@ -14,7 +14,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
     @Query(value = MyQuery.NOTIFICATION_FIND_BY_USER_ID, nativeQuery = true)
     List<Notification> findByUserId(@PathParam("userId") Long userId);
 
-    @Query(value = "", nativeQuery = true)
+    @Query(value = MyQuery.NOTIFICATION_FIND_BY_USER_ID_AND_CATEGORY_ID, nativeQuery = true)
     List<Notification> findByUserIdAndCategoryId(
             @PathParam("userId") Long userId, @PathParam("categoryId") Integer categoryId
     );

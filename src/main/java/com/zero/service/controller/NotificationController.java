@@ -22,7 +22,7 @@ public class NotificationController {
 
     @GetMapping
     public ResponseEntity<?> notificationListByUserIdAndOrCategoryId(
-        @RequestParam(required = true) Long userId,
+        @RequestParam(required = false) Long userId,
         @RequestParam(required = false) Integer categoryId
     ){
         List<NotificationResponse> notificationResponseList = this.notificationService.findByUserIdAndOrCategoryId(
